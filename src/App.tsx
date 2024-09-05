@@ -43,12 +43,6 @@ function App() {
     'Я': '.-.-',
   };
 
-  const initializeAudioContext = async () => {
-      const newAudioContext = new window.AudioContext();
-      setAudioContext(newAudioContext);
-
-  };
-
   const singString = async (str: string) => {
     const arr = str.split('');
     const notes: string[] = [];
@@ -63,19 +57,9 @@ function App() {
     });
 
     await Tone.start();
-    recorder.start();
     for (let i = 0; i < notes.length; i++) {
       synth.triggerAttackRelease(notes[i], "8n", now + i);
     }
-
-    setTimeout(async () => {
-      const recording = await recorder.stop();
-      const url = URL.createObjectURL(recording);
-      const anchor = document.createElement("a");
-      anchor.download = "recording.wav";
-      anchor.href = url;
-      anchor.click();
-    }, 4000);
   };
 
 
