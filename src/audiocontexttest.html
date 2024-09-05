@@ -1,0 +1,24 @@
+<button id="play">Play Sound</button>
+<button id="stop">Stop Sound</button>
+
+<script>
+let audioContext;
+let oscillator;
+
+document.getElementById('play').addEventListener('click', function() {
+    if (!audioContext) {
+        audioContext = new window.AudioContext();
+    }
+    oscillator = audioContext.createOscillator();
+    oscillator.connect(audioContext.destination);
+
+    oscillator.start();
+});
+
+document.getElementById('stop').addEventListener('click', function() {
+    if (oscillator) {
+        oscillator.stop();
+        oscillator.disconnect();
+    }
+});
+</script>
