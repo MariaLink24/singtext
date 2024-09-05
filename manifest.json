@@ -1,4 +1,11 @@
 {
     "name": "sing-a-text",
-    "short_name": "sing-a-text"
+    "short_name": "sing-a-text",
+    "icons": [
+      {
+        "src": "pwa-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ]
   }

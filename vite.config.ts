@@ -5,5 +5,5 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), VitePWA({  manifest })],
+  plugins: [react(), VitePWA({  manifest, includeAssets: ['pwa-192x192.svg'] })],
 })
