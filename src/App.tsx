@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
 function App() {
   const [value, setValue] = useState('');
@@ -48,8 +48,10 @@ function App() {
     const notes: string[] = [];
 
     arr.forEach((el) => {
+      //@ts-ignore
       const morseCode = morse[el.toUpperCase()];
       if (morseCode) {
+              //@ts-ignore
         morseCode.split('').forEach((e) => {
           notes.push(e === '.' ? "C4" : "B4");
         });
