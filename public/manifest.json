@@ -1,0 +1,7 @@
+{
+    "name": "sing-a-text",
+    "background_color": "#f4c9e6",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/"
+  }
