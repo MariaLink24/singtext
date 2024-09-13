@@ -12,12 +12,12 @@ function App() {
   const [decodedText, setDecodedText] = useState(''); 
 
 
-  const [isListening, setIsListening] = useState(false); // Track if the mic is active
-  const audioContextRef = useRef<AudioContext | null>(null); // Ref for AudioContext
-  const analyserRef = useRef<AnalyserNode | null>(null); // Ref for AnalyserNode
-  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null); // Ref for MediaStreamSource
-  const streamRef = useRef<MediaStream | null>(null); // Ref for the media stream
-  const intervalRef = useRef<number | null>(null); // Ref for the interval ID
+  const [isListening, setIsListening] = useState(false); 
+  const audioContextRef = useRef<AudioContext | null>(null); 
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null); 
+  const streamRef = useRef<MediaStream | null>(null); 
+  const intervalRef = useRef<number | null>(null); 
 
   const morse = {
     'А': '.-',
