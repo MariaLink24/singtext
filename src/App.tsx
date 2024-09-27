@@ -7,10 +7,12 @@ const App = () => {
   const notes = {
     B: 261, 
     A: 440,
+      'start': 800,
       'end': 1000,
       'break': 50
 
   };
+    let isListening = false;
 
   const convertTextToBinary = (text: string) => {
     return text
@@ -20,7 +22,7 @@ const App = () => {
   };
 
   const convertBinaryToNotes = (binary: string) => {
-    const notesList = ['end'];
+    const notesList = ['start'];
     for (let i = 0; i < binary.length; i++) {
       const bit = binary[i];
       notesList.push(bit === '0' ? 'B' : 'A');
@@ -98,24 +100,26 @@ console.log('notesToPlay:', notesToPlay);
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
       const input = audioContext.createMediaStreamSource(stream);
       input.connect(analyser);
-  
-      let binarySequence= [];
+
+        let binarySequence= [];
       let decodedText = '';
       let note = '';
       let collecting = false;
       let allnotes = [];
+
       const processAudio = () => {
         analyser.getByteTimeDomainData(dataArray);
         const freq = autoCorrelate(dataArray, audioContext.sampleRate);
  console.log('freq ', freq)
-          let isListening = false;
         if (freq !== -1) {
+            if (freq >750 && freq <850 ){
+                isListening = true;
+                console.log('Start listening')
+            }
             if (freq >900 && freq <1100){
                 console.error('Data stream terminated')
-                isListening = !isListening;
-                if (!isListening) {
+                isListening = false;
                   input.mediaStream.getAudioTracks()[0].enabled = false;
-                }
             }
             if (freq >45 && freq <65){
                note = 'break'
