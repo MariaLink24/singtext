@@ -20,7 +20,7 @@ const App = () => {
   };
 
   const convertBinaryToNotes = (binary: string) => {
-    const notesList = [];
+    const notesList = ['end'];
     for (let i = 0; i < binary.length; i++) {
       const bit = binary[i];
       notesList.push(bit === '0' ? 'B' : 'A');
@@ -108,23 +108,27 @@ console.log('notesToPlay:', notesToPlay);
         analyser.getByteTimeDomainData(dataArray);
         const freq = autoCorrelate(dataArray, audioContext.sampleRate);
  console.log('freq ', freq)
+          let isListening = false;
         if (freq !== -1) {
             if (freq >900 && freq <1100){
                 console.error('Data stream terminated')
-                input.mediaStream.getAudioTracks()[0].enabled = false;
+                isListening = !isListening;
+                if (!isListening) {
+                  input.mediaStream.getAudioTracks()[0].enabled = false;
+                }
             }
             if (freq >45 && freq <65){
                note = 'break'
             }
-          if (freq >= 100 && freq <= 270) {
+          if (freq >= 230 && freq <= 270) {
             note = 'B'; 
-          } else if (freq >= 300 && freq <= 450) {
+          } else if (freq >= 400 && freq <= 450) {
             note = 'A'; 
           } else {
             note = '';
           }
 
-          if (note) {
+          if (note && isListening) {
             console.log(`Detected note: ${note}`);
               console.log('binarySequence', binarySequence)
               binarySequence.filter(n=> n!=='break')
