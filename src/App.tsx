@@ -111,6 +111,7 @@ console.log('notesToPlay:', notesToPlay);
         analyser.getByteTimeDomainData(dataArray);
         const freq = autoCorrelate(dataArray, audioContext.sampleRate);
  console.log('freq ', freq)
+          ///записывать первую букву и ждать следующего брейка
         if (freq !== -1) {
             if (freq >750 && freq <850 ){
                 isListening = true;
