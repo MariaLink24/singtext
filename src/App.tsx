@@ -6,7 +6,10 @@ const App = () => {
 
   const notes = {
     B: 261, 
-    A: 440, 
+    A: 440,
+      'end': 1000,
+      'break': 50
+
   };
 
   const convertTextToBinary = (text: string) => {
@@ -20,8 +23,10 @@ const App = () => {
     const notesList = [];
     for (let i = 0; i < binary.length; i++) {
       const bit = binary[i];
-      notesList.push(bit === '0' ? 'B' : 'A'); 
+      notesList.push(bit === '0' ? 'B' : 'A');
+      if (i%8===0) notesList.push(notes['break'])
     }
+      notesList.push(notes['end']);
     return notesList;
   };
 
@@ -94,7 +99,7 @@ console.log('notesToPlay:', notesToPlay);
       const input = audioContext.createMediaStreamSource(stream);
       input.connect(analyser);
   
-      let binarySequence = '';
+      let binarySequence= [];
       let decodedText = '';
       let note = '';
       let collecting = false;
@@ -104,6 +109,13 @@ console.log('notesToPlay:', notesToPlay);
         const freq = autoCorrelate(dataArray, audioContext.sampleRate);
  
         if (freq !== -1) {
+            if (freq >900 && freq <1100){
+                console.error('Data stream terminated')
+                input.mediaStream.getAudioTracks()[0].enabled = false;
+            }
+            if (freq >45 && freq <65){
+               note = 'break'
+            }
           if (freq >= 100 && freq <= 270) {
             note = 'B'; 
           } else if (freq >= 300 && freq <= 450) {
@@ -111,14 +123,18 @@ console.log('notesToPlay:', notesToPlay);
           } else {
             note = '';
           }
+
           if (note) {
             console.log(`Detected note: ${note}`);
-           allnotes.push(note) 
-            binarySequence += note === 'B' ? '0' : '1';
-  
-            // if (binarySequence.length >= 8) {
-              const segment = binarySequence.slice(0, 8); 
+              console.log('binarySequence', binarySequence)
+              binarySequence.filter(n=> n!=='break')
+            binarySequence.push(note === 'B' ? '0' : '1');
+            if (binarySequence.length >= 8 && binarySequence % 8 === 0) {
+              const segment = binarySequence.slice(0, 8);
+              console.log('char')
               const char = String.fromCharCode(parseInt(segment, 2));
+              console.log('char', char)
+
               decodedText += char;
               setDecodedText(decodedText);
   
@@ -126,19 +142,20 @@ console.log('notesToPlay:', notesToPlay);
               console.log(`Full decoded text: ${decodedText}`);
 
               binarySequence = binarySequence.slice(8); 
-            // }
+            }
             
           }
 
         }
         requestAnimationFrame(processAudio);
-       
-        console.log('allnotes:', allnotes);
+
 
       };
-  
-      processAudio();
+
+        processAudio();
       console.log(`Binary sequence: ${binarySequence}`);
+        console.log('allnotes:', allnotes);
+
 
     }).catch(error => {
       console.error('Error accessing microphone:', error);
