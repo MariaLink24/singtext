@@ -24,9 +24,9 @@ const App = () => {
     for (let i = 0; i < binary.length; i++) {
       const bit = binary[i];
       notesList.push(bit === '0' ? 'B' : 'A');
-      if (i%8===0) notesList.push(notes['break'])
+      if (i%8===0) notesList.push('break')
     }
-      notesList.push(notes['end']);
+      notesList.push('end');
     return notesList;
   };
 
@@ -107,7 +107,7 @@ console.log('notesToPlay:', notesToPlay);
       const processAudio = () => {
         analyser.getByteTimeDomainData(dataArray);
         const freq = autoCorrelate(dataArray, audioContext.sampleRate);
- 
+ console.log('freq ', freq)
         if (freq !== -1) {
             if (freq >900 && freq <1100){
                 console.error('Data stream terminated')
